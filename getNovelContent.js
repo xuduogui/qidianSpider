@@ -5,9 +5,11 @@ const entities = new Entities();
 const fs = require('fs');
 
 const agent = require('./UserAgent/htmlAgent');
+const ctrCur = require('./UserAgent/numConcurrence')
 
-let concurrencyCount = 0;
-let n = 0;
+// 计算成功写入的章节数目
+let successNum = 0;
+let errNum = 0;
 // 获取小说章节内容的链接拼接
 const chapterLink = 'https://read.qidian.com/chapter/';
 // 处理返回值方法
@@ -22,16 +24,12 @@ const handleContent = async (res, name) => {
     })
     // 解析字符串
     chapterName = entities.decode(chapterName);
-    try {
-        // 异步写入
-        fs.writeFile(
-            `./doc/${name}/${strs}.txt`,
-            chapterName,
-            err => err ? console.log('文件写入出错了' + name + strs + err) : console.log(n++, '写入： ' + name + ' ' + strs))
-        // true
-    } catch (err) {
-        err => console.log(name + '文件写入出错了' + err)
-    }
+    // 异步写入
+    fs.writeFile(
+        `./doc/${name}/${strs}.txt`,
+        chapterName,
+        err => err ? console.log(errNum + '文件写入出错了' + name + strs + err) : true)
+        // console.log(successNum++, '写入： ' + name + ' ' + strs)
 }
 
 // 多次尝试请求
@@ -39,7 +37,7 @@ const rqTimes = async url => {
     let res = '';
     for (let i = 0; i < 5; ++i) {
         try {
-            res = await rp(url);
+            res = await ctrCur(url);
             break;
         } catch (err) {console.log(err)}
     }
@@ -50,12 +48,14 @@ const rqTimes = async url => {
 const getNovelContent = async (str, name) => {
     let qs = {bookId: ''};
     let url = chapterLink + str;
+    console.log('获取小说某一章的内容：', name, url)
     let agt = agent(url, qs);
     let res = await rqTimes(agt);
-    
+    console.log('获取某一章的内容： ', name, ' 成功', url)
+    console.log('success: ', successNum++)
     // let res = await rqTimes(url)
     // 异步处理文件写入
-    handleContent(res, name)
+    await handleContent(res, name)
         .catch(err => console.log(name, err));
 }
 

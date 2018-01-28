@@ -28,8 +28,8 @@ const handleContent = async (res, name) => {
     fs.writeFile(
         `./doc/${name}/${strs}.txt`,
         chapterName,
-        err => err ? console.log(errNum + '文件写入出错了' + name + strs + err) : true)
-        // console.log(successNum++, '写入： ' + name + ' ' + strs)
+        err => err ? console.log(errNum + '文件写入出错了' + name + strs + err) : console.log('写入 --- ', strs))
+        // true
 }
 
 // 多次尝试请求
@@ -48,10 +48,10 @@ const rqTimes = async url => {
 const getNovelContent = async (str, name) => {
     let qs = {bookId: ''};
     let url = chapterLink + str;
-    console.log('获取小说某一章的内容：', name, url)
+    console.log('发起 --- 获取小说某一章的内容：', name, url)
     let agt = agent(url, qs);
     let res = await rqTimes(agt);
-    console.log('获取某一章的内容： ', name, ' 成功', url)
+    console.log('成功 --- 获取某一章的内容： ', name, url)
     console.log('success: ', successNum++)
     // let res = await rqTimes(url)
     // 异步处理文件写入

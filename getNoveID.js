@@ -35,9 +35,9 @@ const replaceEach = async (arr, $) => {
 // 获取id,输入页码e，获得小说列表页html，并处理
 const getNovelID = async pageNum => {
     let url = link + pageNum;
-    console.log('获取免费小说列表：', url)
+    console.log('发起------ 获取免费小说列表：', url)
     let res = await ctrCur(url);
-    console.log(`获取免费小说列表  第${pageNum}页  成功`);
+    console.log(`成功------ 获取免费小说列表  第${pageNum}页`);
     let $ = cheerio.load(res);
     let a = $('.rank-table-list .name');
     await replaceEach(a, $)

@@ -1,17 +1,20 @@
 const rp = require('request-promise');
 
 
-// 并发控制
+// 控制并发请求量
 let curNum = 0;
 let ctrCur = async url => {
     curNum++;
     while (true) {
         if (curNum < 10) {
-            curNum--
-            return await rp(url)
-                .catch(err => console.log(err))
+            let res = await rp(url);
+            curNum--;
+            return res;
         }
     }
 }
+
+
+
 
 module.exports = ctrCur;

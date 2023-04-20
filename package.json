@@ -10,7 +10,7 @@
     "cheerio": "^1.0.0-rc.2",
     "fs": "0.0.1-security",
     "html-entities": "^1.2.1",
-    "request": "^2.83.0",
+    "request": "^2.88.2",
     "request-promise": "^4.2.2"
   },
   "devDependencies": {},
